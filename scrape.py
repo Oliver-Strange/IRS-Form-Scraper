@@ -19,3 +19,22 @@
 #    - class "LeftCellSpacer" - a link to download pdf with text as the product number
 #    - class "MiddleCellSpacer" - the title 
 #    - class "EndCellSpacer" - the year
+
+#%%
+import requests 
+from bs4 import BeautifulSoup
+
+# %%
+# Declare the url you want to scrape
+URL = "https://apps.irs.gov/app/picklist/list/priorFormPublication.html"
+
+# Request the raw HTML data from URL and store it in a variable 
+page = requests.get(URL)
+
+# Use BeautifulSoup to parse the page content and store it in a variable
+soup = BeautifulSoup(page.content, 'html.parser')
+
+# Find all useful table rows by searching for their even/odd class
+results = soup.findAll(True, {'class':['even','odd']})
+
+print(results)
