@@ -60,6 +60,8 @@ print("HTML grabbed")
 # %%
 # Declare an empty array of the future cleaned results
 clean_results = []
+searched_form_number = ""
+searched_form_title = ""
 
 # Itterate over the soup results 
 for row in results:
@@ -80,6 +82,10 @@ for row in results:
         # Append each row as a dictionary to the cleaned results array
         clean_results.append({"form_number":row_form_number, "form_link":row_form_link, "form_title":row_form_title, "form_year":row_form_year})
 
+        # Assign the title and form number to be used later
+        searched_form_number = row_form_number
+        searched_form_title = row_form_title
+
 print(json.dumps(clean_results))
 
 # %%
@@ -89,20 +95,9 @@ print(json.dumps(clean_results))
 max_form_year = clean_results[0]["form_year"]
 min_form_year = clean_results[len(clean_results)-1]["form_year"]
 
-desired_format = [{}]
+# Innitialize an empty array to hold the final output
+desired_format = []
+# Append desired data in disired order
+desired_format.append({"form_number": searched_form_number,"form_title": searched_form_title, "min_year": int(min_form_year), "max_year": int(max_form_year)})
 
-for value in clean_results[0].values():
-    print(value)
-    desired_format[0]["form_number"] = value[0]
-    desired_format[0]["form_title"] = value[2]
-
-desired_format.append({"min_year": min_form_year, "max_year": max_form_year})
-
-
-
-print(clean_results[0].values())
-
-
-print(desired_format[0])
-
-# %%
+print(json.dumps(desired_format))
