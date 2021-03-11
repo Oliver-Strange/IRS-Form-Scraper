@@ -1,50 +1,18 @@
-# URL to scrape: https://apps.irs.gov/app/picklist/list/priorFormPublication.html
-
-# When W-2 is searched for, URL looks like: 
-# https://apps.irs.gov/app/picklist/list/priorFormPublication.html
-# ?resultsPerPage=200
-# &sortColumn=sortOrder
-# &indexOfFirstRow=0
-# &criteria=formNumber
-# &value=Form+W-2
-# &isDescending=false 
-
-# Data to pull: Product Number, Title, Year Min & Year Max available download range
-
-# Json Shape: [
-#    {
-#       "form_number": "Form W-2",
-#       "form_title": "Wage and Tax Statement (Info Copy Only)",
-#       "min_year": 1954,
-#       "max_year": 2021,
-#    },
-#    ...
-# ]
-
-# Notes:
-# - data is in div with class "picklistTable" in table with class "picklist-dataTable"
-# - table rows have class even/odd but probably just for color
-# - each row has table data:
-#    - class "LeftCellSpacer" - a link to download pdf with text as the product number
-#    - class "MiddleCellSpacer" - the title 
-#    - class "EndCellSpacer" - the year
-# - max amount of results is 200 per page
-
-
 #%%
 import requests 
 from bs4 import BeautifulSoup
 import json
 
 #%%
-# desired_form = input("Which form are you looking for?")
-desired_form = "Form W-2"
+desired_form = input("Which form are you looking for?")
+# desired_form = "Form W-2"
+sanitzed_desired_form = desired_form.replace(" ", "+")
 # change spaces to + for url
 print("Looking for " + desired_form)
 
 # %%
 # Declare the url you want to scrape
-URL = "https://apps.irs.gov/app/picklist/list/priorFormPublication.html?resultsPerPage=200&sortColumn=sortOrder&indexOfFirstRow=0&criteria=formNumber&value=Form+W-2&isDescending=false"
+URL = "https://apps.irs.gov/app/picklist/list/priorFormPublication.html?resultsPerPage=200&sortColumn=sortOrder&indexOfFirstRow=0&criteria=formNumber&value=" + sanitzed_desired_form + "&isDescending=false"
 
 # Request the raw HTML data from URL and store it in a variable 
 page = requests.get(URL)
@@ -55,7 +23,7 @@ soup = BeautifulSoup(page.content, 'html.parser')
 # Find all useful table rows by searching for their even/odd class
 results = soup.findAll(True, {'class':['even','odd']})
 
-print("HTML grabbed")
+print("HTML data retrieved")
 
 # %%
 # Declare an empty array of the future cleaned results
@@ -86,7 +54,7 @@ for row in results:
         searched_form_number = row_form_number
         searched_form_title = row_form_title
 
-print(json.dumps(clean_results))
+print("Results cleaned")
 
 # %%
 # If the URL has isDescending set to false than the first item will be the max year
@@ -101,3 +69,13 @@ desired_format = []
 desired_format.append({"form_number": searched_form_number,"form_title": searched_form_title, "min_year": int(min_form_year), "max_year": int(max_form_year)})
 
 print(json.dumps(desired_format))
+
+#%%
+# input("If you want to download, please enter a year xxxx or range of years xxxx-xxxx")
+
+# establish if it is one year or multiple
+# search the cleaned results for that year or years and the download links
+# check if subdirectory with form number exists
+# if it doesn't, create the subdirectory and download the file there with form number and year as file name
+# else, download the file there 
+
