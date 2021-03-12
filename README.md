@@ -8,7 +8,27 @@ Program to search and download tax forms by name and year.
 
 ## How To Run
 
+- pip install requirements.txt
+
+Run scrape.py file
+- python scrape.py
+- or run by cell in jupyter notebook
+
+Program will ask for form type, ex Form W-2
+
+You can then specify a year or range of years to download
+
 ## Thoughts
+
+This was a really fun project! Thank you for having your coding challenge be something that could be required on the job and not just a regurgitation of knowledge.
+
+## Next Steps
+
+- convert algorithm into definitions that can be referenced via api
+- create a front end to interact with the forms and data
+- have list of existing forms to choose from or search through
+- make sure only correct type of info gets passed through input
+- download personal list of forms to reference incase the IRS HTML changes
 
 ## Notes
 
