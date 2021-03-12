@@ -11,6 +11,7 @@ Program to search and download tax forms by name and year.
 - pip install requirements.txt
 
 Run scrape.py file
+
 - python scrape.py
 - or run by cell in jupyter notebook
 
