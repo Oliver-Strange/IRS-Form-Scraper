@@ -17,6 +17,8 @@ Run scrape.py file
 
 Program will ask for form type, ex Form W-2
 
+Json will be show in terminal
+
 You can then specify a year or range of years to download
 
 ## Thoughts

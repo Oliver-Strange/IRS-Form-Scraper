@@ -8,13 +8,13 @@ import os
 desired_form = input("Which form are you looking for? \n")
 
 # change spaces to + for url
-sanitzed_desired_form = desired_form.replace(" ", "+")
+sanitized_desired_form = desired_form.replace(" ", "+")
 
 print("Looking for " + desired_form + " \n")
 
 # %%
 # Declare the url you want to scrape
-URL = "https://apps.irs.gov/app/picklist/list/priorFormPublication.html?resultsPerPage=200&sortColumn=sortOrder&indexOfFirstRow=0&criteria=formNumber&value=" + sanitzed_desired_form + "&isDescending=false"
+URL = "https://apps.irs.gov/app/picklist/list/priorFormPublication.html?resultsPerPage=200&sortColumn=sortOrder&indexOfFirstRow=0&criteria=formNumber&value=" + sanitized_desired_form + "&isDescending=false"
 
 # Request the raw HTML data from URL and store it in a variable 
 page = requests.get(URL)
@@ -35,7 +35,7 @@ clean_results = []
 searched_form_number = ""
 searched_form_title = ""
 
-# Itterate over the soup results 
+# Iterate over the soup results 
 for row in results:
     # Find and assign desired data in the HTML
     html_form_number = row.find('td', class_='LeftCellSpacer')
@@ -67,7 +67,7 @@ print("Results cleaned \n")
 max_form_year = clean_results[0]["form_year"]
 min_form_year = clean_results[len(clean_results)-1]["form_year"]
 
-# Innitialize an empty array to hold the final output
+# Initialize an empty array to hold the final output
 desired_format = []
 # Append desired data in disired order
 desired_format.append({"form_number": searched_form_number,"form_title": searched_form_title, "min_year": min_form_year, "max_year": max_form_year})
@@ -90,7 +90,7 @@ if len(desired_years) == 4:
     desired_year = desired_years
     print("Downloading " + desired_year + " " + searched_form_number + "\n")
        
-    # Itterate through the clean results 
+    # Iterate through the clean results 
     for form in clean_results:
 
         # Check to see if the form year is the same as desired year
@@ -156,7 +156,7 @@ elif len(desired_years) == 9:
     # Create an empty array to store the download urls
     url_list = []
 
-    # Itterate over the cleaned results
+    # Iterate over the cleaned results
     for form in clean_results:
 
         # If the form year fall within the range of desired years
@@ -165,7 +165,7 @@ elif len(desired_years) == 9:
             # Append the url and form year to the url list
             url_list.append({"form_link":form['form_link'], "form_year": form['form_year']})
 
-    # Itterate over the urls
+    # Iterate over the urls
     for url in url_list:
         # If the directory does not exist
         if not os.path.exists(desired_form):
